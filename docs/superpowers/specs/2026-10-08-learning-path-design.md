@@ -24,6 +24,8 @@ learn the topic, apply it in a small project the learner builds themselves, get 
 | Brainstorm step | Lightweight: 2-3 ideas, learner picks one, one-page spec | Full brainstorming process is too heavy per topic |
 | Review feedback | Hints first, fix only on request | Learning value without getting stuck |
 | Completion gate | Topic is done only when review passes; learner may override | Honest progress record |
+| Topic folder | The skill creates `code/NN-topic/` with build setup only (Java: Maven `pom.xml` + JUnit; Python: `pyproject.toml` + pytest); the learner writes all classes and tests | Skips repeated setup, keeps the real coding for the learner, guarantees the reviewer can run tests |
+| Review target | The whole topic folder, not a fixed file list | Learner can add helper files freely |
 | UI | Phase 1: built-in Claude Code menus (AskUserQuestion). Phase 2: custom pane | Proves the flow before investing in UI |
 
 ## 3. Building blocks
@@ -34,7 +36,8 @@ learn the topic, apply it in a small project the learner builds themselves, get 
 |---|---|
 | `SKILL.md` | Controller: parses the command, finds current state, runs the right step |
 | `references/roadmap-builder.md` | Rules for building and refreshing a roadmap: levels, ordering, official sources, never removing completed topics |
-| `references/spec-template.md` | One-page spec format: goal, requirements, acceptance criteria, exact file paths |
+| `references/spec-template.md` | One-page spec format: goal, requirements, acceptance criteria, topic folder, suggested main class and test names |
+| `references/scaffold.md` | Build setup to create in each topic folder, per language |
 | `references/review-checklist.md` | The four review checks and the hint-first rule |
 
 ### 3.2 Commands
@@ -55,7 +58,8 @@ learning/
     roadmap.md          <- single source of truth: topics, levels, status, stage
     specs/
       03-collections.md
-    code/               <- files named in each spec
+    code/
+      03-collections/   <- one folder per topic, created by the skill with build setup only
   python/
     roadmap.md
     specs/
@@ -65,7 +69,7 @@ learning/
 - One folder per roadmap; switching technologies never touches another roadmap.
 - `roadmap.md` holds both the topic list and progress, so no separate tracker can drift.
 - Status markers: `[ ]` not started, `[~]` in progress, `[x]` done, `[x] (override)` marked done without passing review.
-- An in-progress topic records its stage and spec, e.g. `[~] Collections (stage: build, spec: specs/03-collections.md)`.
+- An in-progress topic records its stage, spec and folder, e.g. `[~] 03 Collections (stage: build, spec: specs/03-collections.md, folder: code/03-collections/)`.
 - `roadmap.md` header holds `last-checked: YYYY-MM-DD` and the list of sources used.
 - Topics added by a refresh are marked `(new)`; outdated topics are flagged, never deleted.
 - `index.md` is a derived summary and can be rebuilt from the roadmap folders at any time.
@@ -89,15 +93,21 @@ When starting a new roadmap and the learner already has another one, offer a sta
 ### 4.3 Brainstorm
 - Suggest 2-3 ideas, one line each, with a difficulty tag.
 - Menu: `Idea 1` / `Idea 2` / `Idea 3` (learner may type their own).
-- Write `specs/NN-topic.md` from the template, including exact file paths using the language's conventions (e.g. `WordCounter.java` + `WordCounterTest.java`; `word_counter.py` + `test_word_counter.py`).
-- Record `stage: build` in the roadmap.
+- Write `specs/NN-topic.md` from the template, including the topic folder and suggested main class and test names using the language's conventions (e.g. `WordCounter.java` + `WordCounterTest.java`; `word_counter.py` + `test_word_counter.py`). Names are guidance; the review does not fail on them.
+- Create the topic folder `code/NN-topic/` with build setup only:
+  - Java: `pom.xml` (Java version = the learner's installed JDK, else the current LTS; JUnit Jupiter latest stable, looked up at creation time) and empty `src/main/java/` and `src/test/java/`.
+  - Python: `pyproject.toml` with pytest, and empty `src/` and `tests/`.
+  - Other technologies: the minimal standard setup for that tool, or an empty folder if none exists.
+  - No source classes or test files.
+- If the folder already exists, never overwrite it; reuse it.
+- Record `stage: build` and the folder in the roadmap.
 
 ### 4.4 Build
 - The learner writes the code; the skill waits.
 - Menu on return: `Review my code` / `Give me a hint to get started` / `Change idea`.
 
 ### 4.5 Review
-Open the files named in the spec. If a build tool is available, build and run tests first; a compile error becomes hint #1.
+Open every source and test file in the topic folder recorded in the roadmap. If a build tool is available, build and run tests first; a compile error becomes hint #1.
 
 | Check | Question |
 |---|---|
@@ -122,7 +132,7 @@ Rule: never block learning; never silently overwrite the learner's files.
 
 | Situation | Behavior |
 |---|---|
-| Spec files missing at review | List missing paths. Menu: `My file is somewhere else` (update spec path) / `I haven't built it yet` |
+| Topic folder missing, or has no source files, at review | Say which. Menu: `My folder is somewhere else` (update the folder in spec and roadmap) / `I haven't built it yet` |
 | Code doesn't compile or tests fail | Report as hint #1 before other checks |
 | No build tool installed | Review by reading only, and say so |
 | Refresh fails | Keep roadmap, leave `last-checked` unchanged, one-line notice, retry next session |
@@ -148,13 +158,15 @@ Skill behavior is tested by running prepared scenarios against fixtures.
 | 4 | Refresh while offline | Keeps roadmap, one-line notice, continues |
 | 5 | Review the planted file | Finds all 3 planted problems, as hints, not fixes |
 | 6 | "Show me the fix for #1" | Shows only that fix |
-| 7 | Spec file missing | Lists the path and shows the menu |
+| 7 | Topic folder has no source files | Says so and shows the menu |
 | 8 | "Mark it done anyway" | Recorded as `[x] (override)` |
 | 9 | Switch to Python and back | Each roadmap keeps its own progress; `index.md` correct |
 | 10 | Malformed roadmap | Shows the problem line; asks before repairing |
 | 11 | Trigger check | Activates on `/learning-path` and "teach me Docker step by step"; stays quiet on unrelated requests |
 
-**Success criteria:** all 11 scenarios pass, each run twice in fresh sessions. Scenarios may be run as evals with the `skill-creator` skill; details go in the implementation plan.
+| 12 | Brainstorm creates the topic folder | Folder has `pom.xml` with JUnit and the empty `src/` folders, and no source files; roadmap records the folder |
+
+**Success criteria:** all 12 scenarios pass, each run twice in fresh sessions. Scenarios may be run as evals with the `skill-creator` skill; details go in the implementation plan.
 
 ## 7. Out of scope (Phase 1)
 
