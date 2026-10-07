@@ -70,12 +70,12 @@ Runs when the learner types `refresh`, or at session start when `last-checked` i
    - Language or runtime: release notes of new versions, and the language's enhancement proposals (for example JEPs for Java, PEPs for Python).
    - Framework or library: release notes and migration guides, deprecation notices.
    - Tool or platform: official documentation changelog and new feature pages.
-   Add any new official page used to `sources:`. Never fetch, scrape or copy roadmap.sh.
+   Every refresh that finds something, including release notes or changelog pages, must append each official page it consulted that is not yet listed to `sources:` (keep existing entries). Never fetch, scrape or copy roadmap.sh.
 2. **Add new topics.** For something important that the roadmap lacks, add a line `- [ ] NN <Topic Name> (new)` at the end of the fitting level (right after that level's last topic). `NN` is the next unused number: the highest number in the file plus one, two digits. Do not renumber anything.
-3. **Flag outdated topics.** If a topic is deprecated or superseded, append ` (outdated: <short reason>)` to its line, after any existing parenthesised part. Never delete a topic.
-4. **Never touch existing progress.** Do not change the number, marker, name or parenthesised stage/spec/folder part of any `[x]` or `[~]` topic. On a `[x]` or `[~]` topic you may only append the outdated note; if you do, say so in the report. Keep the order of existing lines.
-5. **Write once, on success.** Edit the file with the changes, set `last-checked:` to today's date, then update `index.md` (Progress and Current topic may change). Do this only after the research succeeded. Nothing found to change is still a success: only `last-checked` changes.
-6. **Report in one or two lines**, for example "Refreshed Java roadmap: added 2 topics (49 Virtual Threads, 50 Records), flagged 1 as outdated (23 Applets)." or "Refreshed Java roadmap: nothing changed." Then continue with the session; a refresh never asks the learner anything and never interrupts the current step.
+3. **Flag outdated topics.** If a `[ ]` (not started) topic is deprecated or superseded, append ` (outdated: <short reason>)` to its line. Never delete a topic.
+4. **Never touch existing progress.** Never edit the line of any `[x]` or `[~]` topic in any way, not even to flag it outdated; keep the order of existing lines. If an `[x]` or `[~]` topic is outdated, mention it only in the summary (step 6).
+5. **Write once, on success.** Edit the file with the changes and new `sources:` entries, set `last-checked:` to today's date, then update `index.md` (Progress and Current topic may change). Do this only after the research succeeded. Nothing found to change is still a success: only `last-checked` changes.
+6. **Report in one or two lines**, for example "Refreshed Java roadmap: added 2 topics (49 Virtual Threads, 50 Records), flagged 1 as outdated (23 Applets)." or "Refreshed Java roadmap: nothing changed (checked JDK 25 release notes)." The report is at most two short lines in total: no paragraph, no "Sources:" list, no notes about unreachable pages or untouched progress. The summary must name something concrete (a version, topics added or flagged, or what was checked); also mention outdated `[x]`/`[~]` topics here. Then continue with the session; a refresh never asks the learner anything and never interrupts the current step.
 
 ### Failure
 

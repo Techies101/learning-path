@@ -31,3 +31,10 @@ while IFS= read -r line; do
 done < <(grep -E '^- \[.\] ' "$N")
 # new numbers are unique
 [ -z "$(grep -E '^- \[.\] ' "$N" | sed -E 's/^- \[.\] ([0-9]+) .*/\1/' | sort | uniq -d)" ]
+# evidence of fresh research: at least one https URL in sources: not in the original
+srcs() { awk '/^sources:/{f=1;next} /^## /{f=0} f&&/^- https:\/\//{print $2}' "$1"; }
+newsrc=0
+while IFS= read -r u; do
+  srcs "$O" | grep -Fxq -- "$u" || newsrc=1
+done < <(srcs "$N")
+[ "$newsrc" = 1 ] || { echo "no new source URL recorded"; exit 1; }
