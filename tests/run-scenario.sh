@@ -49,12 +49,14 @@ if [ -f "$SCEN/check.sh" ]; then
 fi
 
 if [ -f "$SCEN/judge.md" ]; then
-  JUDGE_OUT="$(cat "$HERE/judge-prompt.md"; printf '\n## Criteria\n\n'; cat "$SCEN/judge.md"; \
-    printf '\n## Transcript\n\n'; cat "$TRANSCRIPT")"
-  JUDGE_OUT="$(cd "$WORK" && claude -p "$JUDGE_OUT" 2>&1)" || fail "judge call failed"
-  echo "$JUDGE_OUT" > "$WORK/judge-output.txt"
-  LAST="$(printf '%s\n' "$JUDGE_OUT" | grep -v '^[[:space:]]*$' | tail -n 1)"
-  printf '%s\n' "$LAST" | grep -q '^VERDICT: PASS' || fail "judge: $LAST"
+  JUDGE_OUT="$WORK/judge-output.txt"
+  if ! (cat "$HERE/judge-prompt.md"; printf '\n## Criteria\n\n'; cat "$SCEN/judge.md"; \
+        printf '\n## Transcript\n\n'; cat "$TRANSCRIPT") \
+      | (cd "$WORK" && claude -p) > "$JUDGE_OUT" 2>&1; then
+    fail "judge call failed (see $JUDGE_OUT)"
+  fi
+  LAST="$(grep -v '^[[:space:]]*$' "$JUDGE_OUT" | tail -n 1 || true)"
+  [ "$LAST" = "VERDICT: PASS" ] || fail "judge: ${LAST:-<empty>} (see $JUDGE_OUT)"
 fi
 
 echo "PASS $NAME"
