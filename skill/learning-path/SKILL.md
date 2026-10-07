@@ -39,14 +39,15 @@ Look for `learning/` in the current folder. If none exists (and the learner has 
 
 ## Session start
 
-Show the position in one line, for example "Java, Level 2 (Intermediate), topic 12 of 48: Collections", plus the resume stage. Then, if the current topic is `[~]` at stage `build`, show the Build menu (see "Build") and nothing else: do not show the menu below, restart the topic, quiz or regenerate anything. For any other state show:
+Show the position in one line, for example "Java, Level 2 (Intermediate), topic 12 of 48: Collections", plus the resume stage. Then, if the current topic is `[~]` at stage `build`, show the Build menu (see "Build") and nothing else: do not show the menu below, restart the topic, quiz or regenerate anything. If it is `[~]` at stage `learn` or `brainstorm`, go straight into that step (see "Learn" or "Brainstorm") with no session-start menu: the learner already chose this topic. For any other state show:
 
 1. Continue `<topic>`
 2. Pick a different topic
 3. Show full roadmap
 4. Switch roadmap
 
-- `Pick a different topic`: list the topics not done, learner chooses; set that topic's stage to `learn`.
+- `Continue <topic>`: if the topic is `[ ]`, mark it `[~]` with `(stage: learn)` and run "Learn"; if it is `[~]`, run the step for its stage.
+- `Pick a different topic`: list the topics not done, learner chooses; mark it `[~]` with `(stage: learn)` and run "Learn".
 - `Show full roadmap`: print the roadmap file's levels and topics as written.
 - `Switch roadmap`: list the roadmaps from `index.md` plus "Start a new one", then continue with the chosen slug. Switching never edits another roadmap.
 
@@ -62,10 +63,27 @@ Each stage of a topic is defined in its own section below. Set the stage in the 
 Follow "Refreshing a roadmap" in `references/roadmap-builder.md` exactly. It runs for the `refresh` command and when State detection finds the roadmap stale. Use only WebSearch and WebFetch for it; if they are unavailable it fails gracefully (one-line notice, roadmap untouched), it never reaches the web another way. After it, report the outcome in one or two lines, then continue with "Session start" (including the Build-menu rule), as if the learner had just opened the roadmap.
 
 ### Learn
-Not available yet. Tell the learner this step is not built yet, then show the session-start menu.
+Entered when the topic's stage is `learn`. Set the roadmap line to `- [~] NN <Topic> (stage: learn)` if it is not already (no `spec:` or `folder:` yet; they are added in Brainstorm).
+
+1. **Teach.** Hand off to the `learn` skill: invoke it with the Skill tool for this one topic (name, roadmap level, and the learner's technology and version) and ask for a short explanation with a small code example, followed by a quiz of 3-5 questions. If `learn` cannot be loaded (not installed, the Skill call errors or is denied, or the Skill tool is not available to you at all), do not stop: teach inline in the same format yourself, and include this exact line once, directly above the first Learn menu of the session: "Note: the `learn` skill would improve this step; I taught it inline instead." Do not repeat it on later menus.
+   - Inline format: a short explanation (a few paragraphs at most, plain words) with one small, correct code example for the learner's language and version; then 3-5 quiz questions, numbered, each answerable in a sentence or by choosing an option, covering the main ideas. Show the questions and wait for answers; give answers with a one-line reason each after the learner replies. Do not reveal answers before.
+2. **Quiz is never a gate.** Whatever the score, the learner can always go on. Do not withhold the Apply option or say they must pass.
+3. **Menu** after the explanation and quiz (and again after each answer round):
+
+   1. Go to Apply
+   2. Explain again more simply
+   3. Quiz me again
+
+   `Explain again more simply`: a shorter, simpler explanation with a different example, then the menu again. `Quiz me again`: 3-5 new questions, then the menu again. `Go to Apply`: set the stage to `brainstorm` (`- [~] NN <Topic> (stage: brainstorm)`) and run "Brainstorm".
 
 ### Brainstorm
-Not available yet. Tell the learner this step is not built yet, then show the session-start menu.
+Entered when the topic's stage is `brainstorm`. Set the roadmap line to `- [~] NN <Topic> (stage: brainstorm)` if it is not already. Read `references/spec-template.md` and `references/scaffold.md` first.
+
+1. **Ideas.** Suggest 2-3 small project ideas that use this topic, one line each, each with a difficulty tag (`easy`, `medium` or `hard`); sized to build in one sitting. Show them as a menu: `1. Idea 1: ...` / `2. Idea 2: ...` / `3. Idea 3: ...`, and say the learner may instead type their own idea. A reply naming an idea in words ("My own idea: ...") is the learner's own idea: use it as given (tighten scope only if clearly too large for one sitting). Menus end your turn: wait.
+2. **Spec.** Write `learning/<slug>/specs/NN-<topic-slug>.md` (create `specs/` if needed) following `references/spec-template.md` exactly: headings, the `## Folder` line `code/NN-<topic-slug>/`, suggested names in the language's conventions. Never overwrite a different existing spec file: if one exists for this topic, ask before replacing it.
+3. **Folder.** Create the topic folder `learning/<slug>/code/NN-<topic-slug>/` following `references/scaffold.md` (build setup only, never source or test files, never overwrite an existing folder).
+4. **Record.** Only after the spec and the folder both exist, change the roadmap line to `- [~] NN <Topic> (stage: build, spec: specs/NN-<topic-slug>.md, folder: code/NN-<topic-slug>/)`, and update `index.md` (Last active).
+5. **Hand off to Build.** Tell the learner, in a few lines: the spec path, the folder path, the suggested names, and that they write the code themselves. Then show the Build menu (see "Build").
 
 ### Build
 Waiting on the learner's code. When the learner returns (or when resuming at stage `build`), show:

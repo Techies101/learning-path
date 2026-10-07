@@ -1,0 +1,1 @@
+My own idea: total expense claims by category using streams

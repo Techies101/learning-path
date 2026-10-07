@@ -28,6 +28,7 @@ sources:
 ## Level 4: Expert
 ```
 
+- Before a spec exists, a topic at stage `learn` or `brainstorm` carries only the stage: `- [~] 02 <Topic Name> (stage: learn)` or `(stage: brainstorm)`. Brainstorm adds `spec:` and `folder:` when it moves the topic to `build`; from stage `build` on, all three are always present.
 - Topic numbers are global across levels, two digits, zero-padded, and never renumbered.
 - Markers: `[ ]` not started, `[~]` in progress, `[x]` done, `[x] (override)` done without passing review.
 - Outdated topics get a trailing note `(outdated: <reason>)`. Topics added later get `(new)`. Never delete a topic.
