@@ -44,7 +44,7 @@ sources:
 - Rows sorted by Last active, newest first.
 - `Progress` = count of `[x]` lines (overrides included) / total topic lines.
 - `Current topic` = the first `[~]` topic, else the first `[ ]` topic, else `done`.
-- `Last active` = today's date for the roadmap the learner is working with this session; for other roadmaps keep the date already in the index, or if rebuilding with no index, use the roadmap file's modification date.
+- `Last active` = today's date for the roadmap the learner is working with this session; for other roadmaps keep the date already in the index, else use that roadmap's `last-checked` date.
 - It is derived. See SKILL.md for when to rebuild it.
 
 ## Building a new roadmap

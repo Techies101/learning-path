@@ -22,8 +22,8 @@ The text after `/learning-path`, or the technology named in a natural request ("
 |---|---|
 | `<technology>` | slug it. If `learning/<slug>/roadmap.md` exists, resume it. Otherwise build it (see "Start a new roadmap"). |
 | empty | resume the most recently active roadmap (top row of `learning/index.md`). If there are no roadmaps, ask which technology to learn. |
-| `refresh` | refresh the current roadmap (see "Refresh", defined in a later section). |
-| `status` | show the roadmap and progress (see "Track", defined in a later section), without starting a step. |
+| `refresh` | refresh the current roadmap (see "Refresh"). |
+| `status` | show the roadmap file's levels, topics and markers as written plus the position line, without starting a step. |
 
 ## First run: where does `learning/` live?
 
@@ -39,7 +39,7 @@ Look for `learning/` in the current folder. If none exists (and the learner has 
 
 ## Session start
 
-Show the position in one line, for example "Java, Level 2 (Intermediate), topic 12 of 48: Collections", plus the resume stage. Then resume at the recorded stage (jump straight to that stage's menu, for `build` the Build menu; do not restart the topic, quiz again or regenerate anything). When the learner has not chosen to resume a specific stage, show:
+Show the position in one line, for example "Java, Level 2 (Intermediate), topic 12 of 48: Collections", plus the resume stage. Then, if the current topic is `[~]` at stage `build`, show the Build menu (see "Build") and nothing else: do not show the menu below, restart the topic, quiz or regenerate anything. For any other state show:
 
 1. Continue `<topic>`
 2. Pick a different topic
@@ -50,8 +50,6 @@ Show the position in one line, for example "Java, Level 2 (Intermediate), topic 
 - `Show full roadmap`: print the roadmap file's levels and topics as written.
 - `Switch roadmap`: list the roadmaps from `index.md` plus "Start a new one", then continue with the chosen slug. Switching never edits another roadmap.
 
-When a topic is already `[~]` at stage `build`, skip this menu and show the Build menu directly after the position line, because the learner returned to work on the code.
-
 ## Start a new roadmap
 
 Follow "Building a new roadmap" in `references/roadmap-builder.md` exactly (ambiguity check, prior-roadmap starting-level offer, research, write file, update index). Then show the position and the session-start menu above.
@@ -61,13 +59,13 @@ Follow "Building a new roadmap" in `references/roadmap-builder.md` exactly (ambi
 Each stage of a topic is defined in its own section below. Set the stage in the roadmap line as you enter it. The step sections are filled in by later parts of this skill.
 
 ### Refresh
-Defined in a later section.
+Not available yet. Tell the learner in one line that refresh is not available yet, then continue with the session.
 
 ### Learn
-Defined in a later section.
+Not available yet. Tell the learner this step is not built yet, then show the session-start menu.
 
 ### Brainstorm
-Defined in a later section.
+Not available yet. Tell the learner this step is not built yet, then show the session-start menu.
 
 ### Build
 Waiting on the learner's code. When the learner returns (or when resuming at stage `build`), show:
@@ -76,10 +74,10 @@ Waiting on the learner's code. When the learner returns (or when resuming at sta
 2. Give me a hint to get started
 3. Change idea
 
-Review, hint and change-idea handling are defined in a later section.
+Handling of these three choices is not available yet: tell the learner so in one line and show the Build menu again.
 
 ### Review
-Defined in a later section.
+Not available yet. Tell the learner this step is not built yet, then show the Build menu.
 
 ### Track
-Defined in a later section.
+Not available yet. Tell the learner this step is not built yet, then show the session-start menu.
