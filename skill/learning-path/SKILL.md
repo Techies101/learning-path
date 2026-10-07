@@ -34,7 +34,7 @@ Look for `learning/` in the current folder. If none exists (and the learner has 
 1. Read `learning/index.md` if present. Rebuild it silently (per roadmap-builder.md) if it is missing, or if any roadmap folder is missing from it or its Progress/Current topic differs from the roadmap file. The roadmap files are the truth. A rebuild does not change any roadmap.
 2. Pick the active roadmap: the one named in the command, else the top index row.
 3. Read its `roadmap.md`. The current topic is the first `[~]` line; its `stage:` says where to resume. If none is `[~]`, the current topic is the first `[ ]` line, and the stage is `learn`.
-4. If `last-checked` is older than 30 days, a refresh is due (see "Refresh").
+4. If `last-checked` is older than 30 days before today, a refresh is due: run "Refresh" now, before the session start below. Never ask the learner first. A roadmap checked within 30 days is not refreshed (only `refresh` forces it).
 5. Mark the roadmap's Last active as today in `index.md` whenever the learner works on it.
 
 ## Session start
@@ -59,7 +59,7 @@ Follow "Building a new roadmap" in `references/roadmap-builder.md` exactly (ambi
 Each stage of a topic is defined in its own section below. Set the stage in the roadmap line as you enter it. The step sections are filled in by later parts of this skill.
 
 ### Refresh
-Not available yet. Tell the learner in one line that refresh is not available yet, then continue with the session.
+Follow "Refreshing a roadmap" in `references/roadmap-builder.md` exactly. It runs for the `refresh` command and when State detection finds the roadmap stale. Use only WebSearch and WebFetch for it; if they are unavailable it fails gracefully (one-line notice, roadmap untouched), it never reaches the web another way. After it, report the outcome in one or two lines, then continue with "Session start" (including the Build-menu rule), as if the learner had just opened the roadmap.
 
 ### Learn
 Not available yet. Tell the learner this step is not built yet, then show the session-start menu.

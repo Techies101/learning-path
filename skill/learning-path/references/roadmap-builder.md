@@ -1,6 +1,6 @@
 # Roadmap builder
 
-Rules for creating a roadmap and the exact file formats every step reads and writes. Refresh rules are added in a later section ("Refreshing a roadmap").
+Rules for creating a roadmap and the exact file formats every step reads and writes. Refresh rules are in "Refreshing a roadmap" at the end.
 
 ## Slug rule
 
@@ -61,3 +61,22 @@ sources:
 6. **Reference line.** Add `reference: https://roadmap.sh/<slug>` only when you know that page exists. Never fetch, scrape or copy roadmap.sh content; the link is only for the learner to open.
 7. **Write** `learning/<slug>/roadmap.md` with every topic `[ ]` and `last-checked:` set to today. Do not create `specs/` or `code/` yet.
 8. **Update** `learning/index.md` (create it if missing).
+
+## Refreshing a roadmap
+
+Runs when the learner types `refresh`, or at session start when `last-checked` is more than 30 days before today. Use only WebSearch and WebFetch for the research. If neither works (tool unavailable, denied, errors, no usable results), do not try other ways to reach the web (no curl, wget or similar through Bash) and go to "Failure" below.
+
+1. **Check sources.** Re-check the `sources:` pages and look for what changed since `last-checked`, by technology type:
+   - Language or runtime: release notes of new versions, and the language's enhancement proposals (for example JEPs for Java, PEPs for Python).
+   - Framework or library: release notes and migration guides, deprecation notices.
+   - Tool or platform: official documentation changelog and new feature pages.
+   Add any new official page used to `sources:`. Never fetch, scrape or copy roadmap.sh.
+2. **Add new topics.** For something important that the roadmap lacks, add a line `- [ ] NN <Topic Name> (new)` at the end of the fitting level (right after that level's last topic). `NN` is the next unused number: the highest number in the file plus one, two digits. Do not renumber anything.
+3. **Flag outdated topics.** If a topic is deprecated or superseded, append ` (outdated: <short reason>)` to its line, after any existing parenthesised part. Never delete a topic.
+4. **Never touch existing progress.** Do not change the number, marker, name or parenthesised stage/spec/folder part of any `[x]` or `[~]` topic. On a `[x]` or `[~]` topic you may only append the outdated note; if you do, say so in the report. Keep the order of existing lines.
+5. **Write once, on success.** Edit the file with the changes, set `last-checked:` to today's date, then update `index.md` (Progress and Current topic may change). Do this only after the research succeeded. Nothing found to change is still a success: only `last-checked` changes.
+6. **Report in one or two lines**, for example "Refreshed Java roadmap: added 2 topics (49 Virtual Threads, 50 Records), flagged 1 as outdated (23 Applets)." or "Refreshed Java roadmap: nothing changed." Then continue with the session; a refresh never asks the learner anything and never interrupts the current step.
+
+### Failure
+
+If the refresh cannot complete, leave `roadmap.md` and `last-checked` exactly as they were and write nothing partial. Tell the learner in one line: "Could not refresh the roadmap (no web access); I will retry next session." Then continue the session as normal. When the learner typed `refresh`, same line, then show the session-start menu (or the Build menu if the current topic is at stage `build`).
