@@ -66,9 +66,9 @@ Follow "Refreshing a roadmap" in `references/roadmap-builder.md` exactly. It run
 Entered when the topic's stage is `learn`. Set the roadmap line to `- [~] NN <Topic> (stage: learn)` if it is not already (no `spec:` or `folder:` yet; they are added in Brainstorm).
 
 1. **Teach.** Hand off to the `learn` skill: invoke it with the Skill tool for this one topic (name, roadmap level, and the learner's technology and version) and ask for a short explanation with a small code example, followed by a quiz of 3-5 questions. If `learn` cannot be loaded (not installed, the Skill call errors or is denied, or the Skill tool is not available to you at all), do not stop: teach inline in the same format yourself, and include this exact line once, directly above the first Learn menu of the session: "Note: the `learn` skill would improve this step; I taught it inline instead." Do not repeat it on later menus.
-   - Inline format: a short explanation (a few paragraphs at most, plain words) with one small, correct code example for the learner's language and version; then 3-5 quiz questions, numbered, each answerable in a sentence or by choosing an option, covering the main ideas. Show the questions and wait for answers; give answers with a one-line reason each after the learner replies. Do not reveal answers before.
+   - Inline format: a short explanation (a few paragraphs at most, plain words) with one small, correct code example for the learner's language and version; then 3-5 quiz questions, numbered, each answerable in a sentence or by choosing an option, covering the main ideas. Do not reveal answers in this message.
 2. **Quiz is never a gate.** Whatever the score, the learner can always go on. Do not withhold the Apply option or say they must pass.
-3. **Menu** after the explanation and quiz (and again after each answer round):
+3. **Menu.** Show the explanation, the quiz questions and this menu together in the same message, then end your turn. The learner's quiz answers arrive as a free-text reply; check them, give the correct answer with a one-line reason for each question, then show the menu again (and again after every later round):
 
    1. Go to Apply
    2. Explain again more simply

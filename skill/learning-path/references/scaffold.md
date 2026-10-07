@@ -13,7 +13,7 @@ Create:
 - `src/main/java/.gitkeep`
 - `src/test/java/.gitkeep`
 
-Look up versions at creation time with WebSearch: the latest stable `org.junit.jupiter:junit-jupiter` (the current major line, use the exact latest release) and the latest stable `maven-surefire-plugin`. Do not use versions from memory; if the search fails, say so and use the most recent versions you can confirm, never a guess presented as current. Read the learner's Java major version from `java -version` (for example `openjdk version "21.0.4"` -> `21`; old style `1.8.0` -> `8`). If Java is not installed, use the current LTS.
+Look up versions at creation time with WebSearch: the latest stable `org.junit.jupiter:junit-jupiter` (the current major line, use the exact latest release) and the latest stable `maven-surefire-plugin`. Do not use versions from memory; if the versions cannot be confirmed with WebSearch/WebFetch (for example offline), still write the file, set each unconfirmed version field to the visible placeholder `VERSION-NOT-CONFIRMED`, tell the learner in one line which versions to fill in, and skip the validate step below. Never guess a version from memory. Read the learner's Java major version from `java -version` (for example `openjdk version "21.0.4"` -> `21`; old style `1.8.0` -> `8`). If Java is not installed, use the current LTS.
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -51,7 +51,7 @@ Look up versions at creation time with WebSearch: the latest stable `org.junit.j
 </project>
 ```
 
-`NN-<topic-slug>` is the folder name (for example `05-streams`). Replace the three `<...>` placeholders with the looked-up values. After writing, run `mvn -q validate` in the folder when `mvn` is installed; if it fails, show the error to the learner in one line and leave the files as they are.
+`NN-<topic-slug>` is the folder name (for example `05-streams`). Replace the three `<...>` placeholders with the looked-up values (or `VERSION-NOT-CONFIRMED`, see above). After writing, unless a version is unconfirmed, run `mvn -q validate` in the folder when `mvn` is installed; if it fails, show the error to the learner in one line and leave the files as they are.
 
 ## Python
 
@@ -60,7 +60,7 @@ Create:
 - `src/.gitkeep`
 - `tests/.gitkeep`
 
-Read the version from `python3 --version` (for example `Python 3.12.4` -> `>=3.12`).
+Read the version from `python3 --version` (a local command, always available); any other version needed (for example a pytest pin) follows the `VERSION-NOT-CONFIRMED` rule if it cannot be confirmed (for example `Python 3.12.4` -> `>=3.12`).
 
 ```
 [project]
@@ -78,4 +78,4 @@ testpaths = ["tests"]
 
 ## Other technologies
 
-Create the minimal standard setup for that tool (for example `package.json` with the standard test runner for Node, `go.mod` for Go, `Cargo.toml` for Rust, a `Dockerfile` for Docker), no source or test files. Look up current versions with WebSearch rather than from memory. If the tool has no project setup, create the empty folder with a `.gitkeep`.
+Create the minimal standard setup for that tool (for example `package.json` with the standard test runner for Node, `go.mod` for Go, `Cargo.toml` for Rust, a `Dockerfile` for Docker), no source or test files. Look up current versions with WebSearch rather than from memory; any version that cannot be confirmed gets the placeholder `VERSION-NOT-CONFIRMED`, with a one-line note to the learner and no validate step. If the tool has no project setup, create the empty folder with a `.gitkeep`.
