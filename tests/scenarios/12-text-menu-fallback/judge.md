@@ -1,0 +1,1 @@
+PASS only if the final part of Claude's reply is a numbered option list (1., 2., ...) that asks the learner to reply with a number, and the options include equivalents of "Continue" and "Show full roadmap". (A first-run "where to create learning/" question with numbered options does not satisfy this unless the Continue and Show full roadmap options appear in a numbered list.)

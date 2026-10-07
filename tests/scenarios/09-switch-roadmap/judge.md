@@ -1,0 +1,1 @@
+PASS only if in turn 1 (/learning-path python, learner already has a Java roadmap) the reply offers a starting level or option that skips concepts the learner already knows from Java (e.g. basics like variables, control flow, collections).
