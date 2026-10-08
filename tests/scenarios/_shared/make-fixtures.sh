@@ -120,13 +120,18 @@ build() { # <scenario> <variation>
   cp -a "$SRC/." "$d/fixture/"
   case "$2" in
     full) ;;
-    empty) find "$d/fixture/$CODE" -name '*.java' -delete ;;
+    empty)
+      find "$d/fixture/$CODE" -name '*.java' -delete
+      # keep the empty source folders tracked by git
+      touch "$d/fixture/$CODE/src/main/java/.gitkeep" "$d/fixture/$CODE/src/test/java/.gitkeep" ;;
     relocated)
       mkdir -p "$d/fixture/learning/java/elsewhere"
       mv "$d/fixture/$CODE" "$d/fixture/learning/java/elsewhere/streams" ;;
     compile-error)
-      sed -i 's/^\(        return totals\);/\1/' "$d/fixture/$CODE/src/main/java/ClaimTotals.java"
-      grep -q '^        return totals$' "$d/fixture/$CODE/src/main/java/ClaimTotals.java" ;;
+      local f="$d/fixture/$CODE/src/main/java/ClaimTotals.java"
+      # portable in-place edit (no GNU-only sed -i)
+      sed 's/^\(        return totals\);/\1/' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+      grep -q '^        return totals$' "$f" ;;
     fixed) write_fixed "$d/fixture/$CODE" ;;
   esac
   cp -a "$d/fixture" "$d/.orig.tmp" && mv "$d/.orig.tmp" "$d/fixture/.orig"
