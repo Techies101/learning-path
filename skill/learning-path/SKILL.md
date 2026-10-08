@@ -114,10 +114,11 @@ Entered from the Build menu. Read `references/review-checklist.md` first and fol
 
    `My folder is somewhere else`: ask for the path (relative to `learning/<slug>/` or absolute; if the learner already gave it, such as "My folder is somewhere else: elsewhere/streams", use it). Check it exists and has source files. If so, write it with a trailing `/` into the spec's `## Folder` line and into the roadmap line's `folder:`, then continue the review. If not, say so in one line and show this menu again. `I haven't built it yet`: show the Build menu.
 2. **Review.** Run the build-first rule and the four checks in the checklist. Report hints grouped as the checklist says (`Spec`, `Topic`, `Quality`, `Best practices`), numbered `#1..#N` globally, hints only. Never edit the learner's code.
-3. **Menu.** With issues, show `1. I fixed it, review again` / `2. Show me the fix for #N` / `3. Mark it done anyway`. If everything passes, show `1. Mark done`; the stage stays `review`.
+3. **Menu.** With issues, show `1. I fixed it, review again` / `2. Show me the fix for #N` / `3. Mark it done anyway`. If the review passes (no blocking findings, see the checklist), show `1. Mark done` as the only option, with any Optional notes above it; the stage stays `review`. `Mark done` exists only on this pass menu.
    - `I fixed it, review again`: run "Review" again from step 1.
    - `Show me the fix for #N`: show only the fix for that hint (checklist, "Show one fix"), then the issues menu again.
-   - `Mark done` / `Mark it done anyway`: run "Track" (`Mark done` writes a plain `[x]`, `Mark it done anyway` writes `[x] ... (override)`).
+   - `Mark done` (pass menu only): run "Track", writing a plain `[x]`. If the learner asks to mark the topic done while blocking findings are open (the last review did not pass, or the code changed since), do not mark it: say in one line that the review has not passed yet and show the issues menu again.
+   - `Mark it done anyway` (issues menu only): run "Track", writing `[x] ... (override)`.
 
 ### Track
 Entered from "Review" when the learner picks `Mark done` or `Mark it done anyway`. Read `references/roadmap-builder.md` for the formats.
@@ -125,7 +126,7 @@ Entered from "Review" when the learner picks `Mark done` or `Mark it done anyway
 1. **Mark the topic.** Rewrite that one roadmap line and no other:
    - `Mark done`: `- [x] NN <Topic Name>`
    - `Mark it done anyway`: `- [x] NN <Topic Name> (override)`
-   Write exactly what the learner chose: never turn `Mark done` into an override, or the reverse, because of the review's findings. In both cases remove the whole `(stage: ..., spec: ..., folder: ...)` note. Leave the spec file and the code folder on disk untouched. Keep any other roadmap line exactly as it is.
+   `Mark done` only comes from a passed review; an override is recorded only for `Mark it done anyway`. In both cases remove the whole `(stage: ..., spec: ..., folder: ...)` note. Leave the spec file and the code folder on disk untouched. Keep any other roadmap line exactly as it is.
 2. **Update `learning/index.md`.** Progress = the count of `[x]` lines (overrides included) / the total topic lines; Current topic = the first `[~]` topic, else the first `[ ]` topic, else `done`; Last active = today. Keep the other columns and rows.
 3. **Show the roadmap.** Say in one line that the topic is done (or done by override). If no `[ ]` or `[~]` topic remains, go to "Completed roadmap" instead of the rest of this step. Otherwise show the levels: the level that contains the next topic (the first `[~]`, else the first `[ ]`) expanded, with its heading and every topic line as written in the file; every other level collapsed to one line `Level N: <Name> (done/total)`, where done counts `[x]` lines (overrides included) and total counts all topic lines of that level, for example `Level 2: Intermediate (3/12)`.
 4. **Menu.** Show, then end your turn:
