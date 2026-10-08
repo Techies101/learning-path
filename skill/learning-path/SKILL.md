@@ -39,7 +39,7 @@ Look for `learning/` in the current folder. If none exists (and the learner has 
 
 ## Session start
 
-Show the position in one line, for example "Java, Level 2 (Intermediate), topic 12 of 48: Collections", plus the resume stage. Then, if the current topic is `[~]` at stage `build`, show the Build menu (see "Build") and nothing else: do not show the menu below, restart the topic, quiz or regenerate anything. If it is `[~]` at stage `learn` or `brainstorm`, go straight into that step (see "Learn" or "Brainstorm") with no session-start menu: the learner already chose this topic. For any other state show:
+Show the position in one line, for example "Java, Level 2 (Intermediate), topic 12 of 48: Collections", plus the resume stage. Then, if the current topic is `[~]` at stage `build` or `review`, show the Build menu (see "Build") and nothing else: do not show the menu below, restart the topic, quiz or regenerate anything. If it is `[~]` at stage `learn` or `brainstorm`, go straight into that step (see "Learn" or "Brainstorm") with no session-start menu: the learner already chose this topic. For any other state show:
 
 1. Continue `<topic>`
 2. Pick a different topic
@@ -86,16 +86,30 @@ Entered when the topic's stage is `brainstorm`. Set the roadmap line to `- [~] N
 5. **Hand off to Build.** Tell the learner, in a few lines: the spec path, the folder path, the suggested names, and that they write the code themselves. Then show the Build menu (see "Build").
 
 ### Build
-Waiting on the learner's code. When the learner returns (or when resuming at stage `build`), show:
+Waiting on the learner's code. When the learner returns (or when resuming at stage `build` or `review`), show:
 
 1. Review my code
 2. Give me a hint to get started
 3. Change idea
 
-Handling of these three choices is not available yet: tell the learner so in one line and show the Build menu again.
+- `Review my code`: set the roadmap line's stage to `review` (keep `spec:` and `folder:`), then run "Review".
+- `Give me a hint to get started`: read the spec and give a short nudge (which class or function to write first and what the first test could check). No code. Then show the Build menu again.
+- `Change idea`: go back to "Brainstorm" ideas for the same topic (set stage `brainstorm`). Never overwrite the existing spec or folder; ask before replacing the spec, and reuse the folder.
 
 ### Review
-Not available yet. Tell the learner this step is not built yet, then show the Build menu.
+Entered from the Build menu. Read `references/review-checklist.md` first and follow it. Set the roadmap line to `- [~] NN <Topic> (stage: review, spec: ..., folder: ...)` with the existing `spec:` and `folder:`.
+
+1. **Locate the code.** Take `folder:` from the roadmap line and read the spec's `## Acceptance Criteria`. If the folder is missing, or has no source files (build setup only), do not review and do not show errors. Say which one, in plain words, and show:
+
+   1. My folder is somewhere else
+   2. I haven't built it yet
+
+   `My folder is somewhere else`: ask for the path (relative to `learning/<slug>/` or absolute; if the learner already gave it, such as "My folder is somewhere else: elsewhere/streams", use it). Check it exists and has source files. If so, write it with a trailing `/` into the spec's `## Folder` line and into the roadmap line's `folder:`, then continue the review. If not, say so in one line and show this menu again. `I haven't built it yet`: show the Build menu.
+2. **Review.** Run the build-first rule and the four checks in the checklist. Report hints grouped as the checklist says (`Spec`, `Topic`, `Quality`, `Best practices`), numbered `#1..#N` globally, hints only. Never edit the learner's code.
+3. **Menu.** With issues, show `1. I fixed it, review again` / `2. Show me the fix for #N` / `3. Mark it done anyway`. If everything passes, show `1. Mark done`; the stage stays `review`.
+   - `I fixed it, review again`: run "Review" again from step 1.
+   - `Show me the fix for #N`: show only the fix for that hint (checklist, "Show one fix"), then the issues menu again.
+   - `Mark done` / `Mark it done anyway`: marking is not available yet; tell the learner in one line and show the menu again.
 
 ### Track
 Not available yet. Tell the learner this step is not built yet, then show the session-start menu.
