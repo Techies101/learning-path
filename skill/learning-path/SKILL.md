@@ -34,10 +34,18 @@ Look for `learning/` in the current folder. If none exists (and the learner has 
 1. Read `learning/index.md` if present. Rebuild it silently (per roadmap-builder.md) if it is missing, or if any roadmap folder is missing from it or its Progress/Current topic differs from the roadmap file. The roadmap files are the truth. A rebuild does not change any roadmap.
 2. Pick the active roadmap: the one named in the command, else the top index row.
 3. Read its `roadmap.md`. The current topic is the first `[~]` line; its `stage:` says where to resume. If none is `[~]`, the current topic is the first `[ ]` line, and the stage is `learn`.
-4. If `last-checked` is older than 30 days before today, a refresh is due: run "Refresh" now, before the session start below. Never ask the learner first. A roadmap checked within 30 days is not refreshed (only `refresh` forces it).
-5. Mark the roadmap's Last active as today in `index.md` whenever the learner works on it.
+4. **Malformed lines.** Read the roadmap leniently. A line under a level heading that starts with `- [` but does not match a topic format in roadmap-builder.md (marker `[ ]`, `[~]` or `[x]`, then `NN`, then the name) is unreadable, for example `- [?? 07 Generics`. Never edit the roadmap because of it, and never rebuild or regenerate the roadmap. Leave that line out of the position, the counts and the current-topic choice, but keep every other line as written. Once per session, before any step or menu, quote the line verbatim, say in one line that it is unreadable, show the position line from the readable lines, and ask whether to repair it with this menu, then end your turn:
+
+   1. Repair it
+   2. Leave it as it is and continue
+
+   `Repair it`: infer the line from its number and name (for example `- [ ] 07 Generics`; use `[ ]` unless the line shows otherwise), write only that one line in place, tell the learner what it now says, then continue. `Leave it as it is and continue`: change nothing and do not ask again this session; continue. Repair only after the learner chose option 1.
+5. If `last-checked` is older than 30 days before today, a refresh is due: run "Refresh" now, before the session start below. Never ask the learner first. A roadmap checked within 30 days is not refreshed (only `refresh` forces it).
+6. Mark the roadmap's Last active as today in `index.md` whenever the learner works on it.
 
 ## Session start
+
+**Completed roadmap.** If the roadmap has no `[ ]` and no `[~]` topic (every readable topic is `[x]`), run "Completed roadmap" below instead of anything in this section: it has no current topic, so never invent one.
 
 Show the position in one line, for example "Java, Level 2 (Intermediate), topic 12 of 48: Collections", plus the resume stage. Then, if the current topic is `[~]` at stage `build` or `review`, show the Build menu (see "Build") and nothing else: do not show the menu below, restart the topic, quiz or regenerate anything. If it is `[~]` at stage `learn` or `brainstorm`, go straight into that step (see "Learn" or "Brainstorm") with no session-start menu: the learner already chose this topic. For any other state show:
 
@@ -109,7 +117,28 @@ Entered from the Build menu. Read `references/review-checklist.md` first and fol
 3. **Menu.** With issues, show `1. I fixed it, review again` / `2. Show me the fix for #N` / `3. Mark it done anyway`. If everything passes, show `1. Mark done`; the stage stays `review`.
    - `I fixed it, review again`: run "Review" again from step 1.
    - `Show me the fix for #N`: show only the fix for that hint (checklist, "Show one fix"), then the issues menu again.
-   - `Mark done` / `Mark it done anyway`: marking is not available yet; tell the learner in one line and show the menu again.
+   - `Mark done` / `Mark it done anyway`: run "Track" (`Mark done` writes a plain `[x]`, `Mark it done anyway` writes `[x] ... (override)`).
 
 ### Track
-Not available yet. Tell the learner this step is not built yet, then show the session-start menu.
+Entered from "Review" when the learner picks `Mark done` or `Mark it done anyway`. Read `references/roadmap-builder.md` for the formats.
+
+1. **Mark the topic.** Rewrite that one roadmap line and no other:
+   - `Mark done`: `- [x] NN <Topic Name>`
+   - `Mark it done anyway`: `- [x] NN <Topic Name> (override)`
+   Write exactly what the learner chose: never turn `Mark done` into an override, or the reverse, because of the review's findings. In both cases remove the whole `(stage: ..., spec: ..., folder: ...)` note. Leave the spec file and the code folder on disk untouched. Keep any other roadmap line exactly as it is.
+2. **Update `learning/index.md`.** Progress = the count of `[x]` lines (overrides included) / the total topic lines; Current topic = the first `[~]` topic, else the first `[ ]` topic, else `done`; Last active = today. Keep the other columns and rows.
+3. **Show the roadmap.** Say in one line that the topic is done (or done by override). If no `[ ]` or `[~]` topic remains, go to "Completed roadmap" instead of the rest of this step. Otherwise show the levels: the level that contains the next topic (the first `[~]`, else the first `[ ]`) expanded, with its heading and every topic line as written in the file; every other level collapsed to one line `Level N: <Name> (done/total)`, where done counts `[x]` lines (overrides included) and total counts all topic lines of that level, for example `Level 2: Intermediate (3/12)`.
+4. **Menu.** Show, then end your turn:
+
+   1. Next topic
+   2. Stop for today
+
+   `Next topic`: take the first `[ ]` topic (or the first `[~]` topic if one exists), mark it `- [~] NN <Topic> (stage: learn)` if it is `[ ]`, set Current topic in `index.md`, and run "Learn". `Stop for today`: change nothing; reply in one line saying progress is saved and `/learning-path` resumes at the next topic.
+
+### Completed roadmap
+Entered when no topic is `[ ]` or `[~]` (at session start, or after Track marks the last topic). Start with a congratulation (the word "Congratulations") in one or two lines: the technology is finished, naming how many topics are done, and mention overrides if any. Show every level collapsed as `Level N: <Name> (done/total)`. Do not invent a topic or start a lesson or quiz, do not show the session-start menu, and do not edit the roadmap. Show this menu and end your turn:
+
+1. Refresh for new topics
+2. Start another roadmap
+
+`Refresh for new topics`: run "Refresh"; if it added topics, continue with "Session start" as it says (the first new `[ ]` topic becomes the current one). `Start another roadmap`: ask which technology to learn, then follow "Start a new roadmap".
