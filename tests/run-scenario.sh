@@ -20,6 +20,9 @@ fi
 
 WORK="$(mktemp -d)"
 [ -d "$SCEN/fixture" ] && cp -a "$SCEN/fixture/." "$WORK/"
+# Fixture dates are tokenized so they never go stale; stamp them with today.
+TODAY="$(date +%F)"
+find "$WORK" -type f -exec grep -lI "__TODAY__" {} + 2>/dev/null | while read -r f; do sed -i "s/__TODAY__/$TODAY/g" "$f"; done || true
 TRANSCRIPT="$WORK/transcript.txt"
 : > "$TRANSCRIPT"
 

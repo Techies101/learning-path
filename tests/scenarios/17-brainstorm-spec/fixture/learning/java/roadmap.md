@@ -1,5 +1,5 @@
 # Java Learning Roadmap
-last-checked: 2026-10-07
+last-checked: __TODAY__
 reference: https://roadmap.sh/java
 sources:
 - https://docs.oracle.com/en/java/javase/21/

@@ -48,7 +48,7 @@ If the `engineering:code-review` skill is available, invoke it with the Skill to
 
 ## 4b. Blocking or optional
 
-The review passes when there are no blocking findings. Blocking means: an unmet acceptance criterion; the topic concept missing or misused; a real bug (incorrect behavior for a plausible input, a compile error, a failing test); or a best-practice violation named in section 3 for the language version. Everything else (defensive null checks the spec does not require, package naming, tie-break choices the spec leaves open, style preferences) is an Optional note: list at most 3 under the heading `Optional notes`, never numbered as hints, and they never block a pass. A review with only Optional notes passes: show them, then the pass menu.
+The review passes when there are no blocking findings. Blocking means: an unmet acceptance criterion; the topic concept missing or misused; a real bug (incorrect behavior for a plausible input, a compile error, a failing test); a public behavior required by the spec that has no test; or a best-practice violation named in section 3 for the language version. Everything else (defensive null checks the spec does not require, package naming, tie-break choices the spec leaves open, style preferences) is an Optional note: list at most 3 under the heading `Optional notes`, never numbered as hints, and they never block a pass. A review with only Optional notes passes: show them, then the pass menu.
 
 ## 5. Hints first
 
