@@ -10,33 +10,43 @@ Read `folder:` from the topic's roadmap line and `## Acceptance Criteria` from t
 
 Build before judging anything else, then read the code.
 
-a. **Run the test command** from inside the folder: `pom.xml` -> `mvn -q test`; `build.gradle` or `build.gradle.kts` -> `gradle test`; `*.py` files -> `python3 -m pytest -q`. If no build file or Python source exists, or the tool is not installed, there is nothing to run: do NOT compile (no `javac`, no `py_compile`), do NOT print the dependency message from step d, skip steps b to d, say in one line "No build tool found, so I reviewed by reading only.", and go on to the four checks by reading.
+a. **Run the test command** from inside the folder: `pom.xml` -> `mvn -q test`; `build.gradle` or `build.gradle.kts` -> `gradle test`; `*.py` files -> `python3 -m pytest -q`. Prefer the project's wrapper when there is one: if `mvnw` (Maven) or `gradlew` (Gradle) exists in the folder or in a parent folder up to the `learning/` workspace root, run it by its path instead (for example `./mvnw -q test` or `../../gradlew test`); a wrapper counts as the tool being installed. If no build file or Python source exists, or the tool is not installed (and there is no wrapper), there is nothing to run: do NOT compile (no `javac`, no `py_compile`), do NOT print the dependency message from step d, skip steps b to d, say in one line "No build tool found, so I reviewed by reading only.", and go on to the four checks by reading.
 b. **Classify a non-zero exit** (exit 0 means the tests pass: go on to the four checks).
    - Compile error: the output contains `COMPILATION ERROR`, `error:` with a file and line, `SyntaxError`, or `cannot find symbol`. Go to step c.
    - Resolution failure: the output contains `Could not resolve`, `could not be resolved`, `Could not transfer artifact`, `Name or service not known`, `Connection refused`, `Read timed out`, `PluginResolutionException`, `DependencyResolutionException`, or `ModuleNotFoundError` for a third-party package. Dependencies or plugins could not be downloaded: it says nothing about the learner's code. Go to step d.
-   - Failing tests: `Tests run:` with failures, `AssertionError`, or pytest `FAILED`. Report them as findings under Quality, naming each failing test, then run the four checks.
+   - Failing tests: `Tests run:` with failures, `AssertionError`, or pytest `FAILED`. Failing tests are hint #1, shown first under the heading `Build`: one hint naming each failing test and its assertion message. Then run the four checks as usual; their hints continue from #2.
    - No tests collected (for example pytest exit code 5, or "No tests were executed"): report "no tests found" as a finding under Quality, then run the four checks.
    - Anything else (a non-zero exit matching none of the above, for example Gradle failing for an unrelated reason): go to step d, but say in one line "The test command failed for an unclear reason: <its last error line>" instead of the dependency message.
-c. **Compile error: hint #1.** A compile error becomes hint #1, shown first under `Build`, with the file and line. The other checks are deferred until it builds: say so in one line and list no other hints.
-d. **Offline compile** (resolution failure or unexplained failure only). Compile the main sources with the plain compiler, which needs no dependencies. Java: `javac -d <a fresh temp dir> $(find src/main/java -name '*.java')`. Python: `python3 -m py_compile` on each source file. If that compile fails, the error is hint #1 as in step c. If it succeeds, say in one line: for a resolution failure, "Tests could not be run because dependencies could not be downloaded, so I reviewed by reading."; for an unexplained failure, the unclear-reason line from step b. Then review by reading.
+c. **Compile error: hint #1.** A compile error becomes hint #1, shown first under the heading `Build`, with the file and line. The other checks are deferred until it builds: say so in one line and list no other hints.
+d. **Offline compile** (resolution failure or unexplained failure only). Compile the main sources with the plain compiler, which needs no dependencies and writes nothing into the learner's folder. Java: `javac -d <a fresh temp dir> $(find src/main/java -name '*.java')`. Python: `PYTHONPYCACHEPREFIX="$(mktemp -d)" python3 -m py_compile <each source file>` (the prefix keeps `__pycache__` out of the folder).
+   - Compiles: say in one line, for a resolution failure, "Tests could not be run because dependencies could not be downloaded, so I reviewed by reading."; for an unexplained failure, the unclear-reason line from step b. Then review by reading.
+   - Fails only because of missing libraries: without a classpath, code that imports a library (for example Spring or JUnit in main sources) fails with errors that say nothing about the learner's code. An error is a missing-library error when it is `package <p> does not exist` for a package that no source file in the folder declares, or `cannot find symbol` for a type, annotation or static member imported from such a package (or used from one, such as an annotation from that package). If every error is of that kind, this is not a compile error and not a hint: say in one line "Dependencies unavailable, so the compile could not be verified; I reviewed by reading.", then review by reading.
+   - Any other error (a syntax error, a type error, or a symbol missing from the folder's own sources): it is a real compile error in the learner's code, hint #1 as in step c. Name only those errors; leave out the missing-library ones.
 
 Tests that pass are not proof the spec is met; keep checking.
 
 ## 3. The four checks
 
-Hints are numbered `#1`, `#2`, ... globally across checks, in order, and grouped under these headings (skip a heading with no hints):
+Hints are numbered `#1`, `#2`, ... globally across checks, in order, and grouped under these headings (skip a heading with no hints). `Build` comes first and holds only a compile error or failing tests from section 2:
 
 | Heading | Question |
 |---|---|
+| Build | Does it compile, and do the tests pass? (from section 2) |
 | Spec | Is each acceptance criterion (AC1, AC2, ...) met? Name the unmet AC in the hint. |
 | Topic | Was the concept just learned used, and used correctly? |
 | Quality | Bugs, naming, error handling, tests (see 4). |
-| Best practices | Does the code follow current idioms for the learner's language version? |
+| Best practices | Does the code follow the blocking idioms below for the learner's language version? |
 
-Best-practice examples (check against the version in the build file):
-- Java 21+: records for plain data, `Optional` instead of returning `null`, pattern matching and `switch` expressions, streams and collectors instead of manual loops where they fit, `List.of`/`Map.of` for immutable collections, `var` for obvious local types.
-- Python: type hints, PEP 8 naming and layout, f-strings, `pathlib`, `with` for resources, comprehensions.
-- Other languages: the current idioms of the version in use.
+Best practices come in two kinds. Check them against the language version in the build file.
+
+**Blocking idioms.** A violation is a numbered hint under `Best practices` and blocks a pass:
+- Java: `Optional` instead of returning `null` for "no result" (Java 8+); records for plain data carriers (Java 16+); the stream operation or collector the topic teaches instead of a hand-written loop that does the same job; try-with-resources for closeable resources (files, I/O streams, connections).
+- Python: type hints on public functions; context managers (`with`) for files and other resources.
+- Other languages: the equivalent core idioms of the version in use (how the language expresses "no value", plain data types, resource cleanup, and the API the topic teaches).
+
+**Style idioms.** Never a numbered hint and never blocking; at most an Optional note (section 4b):
+- Java: `var` for obvious local types, `List.of`/`Map.of`, pattern matching and `switch` expressions where the older form is correct, naming style.
+- Python: PEP 8 formatting nits, naming style, f-strings, `pathlib`, comprehensions.
 
 ## 4. Quality: delegate when possible
 
@@ -48,7 +58,7 @@ If the `engineering:code-review` skill is available, invoke it with the Skill to
 
 ## 4b. Blocking or optional
 
-The review passes when there are no blocking findings. Blocking means: an unmet acceptance criterion; the topic concept missing or misused; a real bug (incorrect behavior for a plausible input, a compile error, a failing test); a public behavior required by the spec that has no test; or a best-practice violation named in section 3 for the language version. Everything else (defensive null checks the spec does not require, package naming, tie-break choices the spec leaves open, style preferences) is an Optional note: list at most 3 under the heading `Optional notes`, never numbered as hints, and they never block a pass. A review with only Optional notes passes: show them, then the pass menu.
+The review passes when there are no blocking findings. Blocking means: an unmet acceptance criterion; the topic concept missing or misused; a real bug (incorrect behavior for a plausible input, a compile error, a failing test); a public behavior required by the spec that has no test; or a violation of a blocking idiom from section 3 for the language version. Everything else (style idioms from section 3, defensive null checks the spec does not require, package naming, tie-break choices the spec leaves open, style preferences) is an Optional note: list at most 3 under the heading `Optional notes`, never numbered as hints, and they never block a pass. A review with only Optional notes passes: show them, then the pass menu.
 
 ## 5. Hints first
 

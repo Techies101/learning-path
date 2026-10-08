@@ -44,7 +44,7 @@ sources:
 
 - Rows sorted by Last active, newest first.
 - `Progress` = count of `[x]` lines (overrides included) / total topic lines.
-- `Current topic` = the first `[~]` topic, else the first `[ ]` topic, else `done`.
+- `Current topic` = the topic the learner is working on in that roadmap. Rule: keep the topic already named here if it is still `[~]` in the roadmap; otherwise the first `[~]` topic, else the first `[ ]` topic, else `done`. When the learner picks a topic (Continue, Pick a different topic, Next topic), set it to that topic. Other `[~]` topics are paused, not lost.
 - `Last active` = today's date for the roadmap the learner is working with this session; for other roadmaps keep the date already in the index, else use that roadmap's `last-checked` date.
 - It is derived. See SKILL.md for when to rebuild it.
 

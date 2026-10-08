@@ -53,6 +53,48 @@ Look up versions at creation time with WebSearch: the latest stable `org.junit.j
 
 `NN-<topic-slug>` is the folder name (for example `05-streams`). Replace the three `<...>` placeholders with the looked-up values (or `VERSION-NOT-CONFIRMED`, see above). After writing, unless a version is unconfirmed, run `mvn -q validate` in the folder when `mvn` is installed; if it fails, show the error to the learner in one line and leave the files as they are.
 
+### Spring Boot
+
+For a Spring Boot roadmap (slug `spring-boot`, or any roadmap whose technology is a Spring Boot application), use the same files and the same lookup rules as Java, with this `pom.xml` instead: the parent is `org.springframework.boot:spring-boot-starter-parent` at the latest stable Spring Boot release, looked up at creation time with WebSearch (never from memory; if it cannot be confirmed, the parent version is `VERSION-NOT-CONFIRMED`, with the one-line note and no validate step, exactly as above). The parent manages the dependency and plugin versions, so write no other versions.
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version><SPRING_BOOT_VERSION></version>
+    <relativePath/>
+  </parent>
+
+  <groupId>learning</groupId>
+  <artifactId>NN-<topic-slug></artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <java.version><JAVA_MAJOR></java.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
+```
+
+Use `spring-boot-starter-web` instead of `spring-boot-starter` when the topic is about web endpoints, and add the starter the topic needs (for example `spring-boot-starter-data-jpa`), still without versions. `spring-boot-starter-test` brings JUnit Jupiter. `<JAVA_MAJOR>` follows the Java rule above, but never below the minimum Java version the chosen Spring Boot release requires (look it up with the version).
+
 ## Python
 
 Create:

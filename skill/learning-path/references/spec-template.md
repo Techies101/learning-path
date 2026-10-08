@@ -29,4 +29,4 @@ code/NN-<topic-slug>/
   - Java: `WordCounter`, `WordCounterTest` (UpperCamelCase class names; classes live in `src/main/java`, tests in `src/test/java`)
   - Python: `word_counter.py`, `test_word_counter.py` (snake_case modules; source in `src/`, tests in `tests/`)
   - Other: the usual file and naming style of that language or tool.
-- `## How to Run` matches the scaffold: Java `mvn test` to run the tests, and `mvn -q compile` then `java -cp target/classes <MainClass>` to run the program; Python `pytest`; other tools their standard commands.
+- `## How to Run` matches the scaffold: Java `mvn test` to run the tests, and `mvn -q compile` then `java -cp target/classes <MainClass>` to run the program (Spring Boot: `mvn spring-boot:run`); Python `pytest`; other tools their standard commands.
