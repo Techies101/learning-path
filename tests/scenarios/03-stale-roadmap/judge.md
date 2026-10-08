@@ -1,0 +1,5 @@
+PASS only if all hold:
+- Before showing the position line and the session-start/Build menu, the reply reports what the refresh changed (topics added, flagged outdated, or that nothing changed) in one or two lines, not a long report.
+- It then continues with the normal session: the position (Collections, topic 4) and, since that topic is at stage build, the Build menu with exactly four options (Review my code / Give me a hint to get started / Change idea / Something else (pick another topic or switch roadmap)).
+- It does not print the full roadmap or ask the learner whether to refresh.
+- The refresh summary names something concrete: a version, a topic added or flagged, or "no changes found" together with what was checked. A bare "refreshed" does not pass.

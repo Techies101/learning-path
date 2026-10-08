@@ -1,0 +1,1 @@
+Judge ONLY the reply to turn 1 (the user message `/learning-path python`). PASS only if that reply explicitly references the learner's existing Java roadmap/knowledge and offers an option to skip basics already known from Java (e.g. variables, control flow, collections) and start at a later level. Later turns are irrelevant to this criterion.
